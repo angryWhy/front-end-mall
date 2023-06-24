@@ -17,7 +17,7 @@
 import "element-plus/theme-chalk/el-message-box.css";
 
 import { ref,  reactive } from "vue";
-import { menuLoad } from '@/service/product/product';
+import { menuLoad } from '@/service/productService/product/product';
 export default {
     name: 'formView',
     props: ["loading", "currentRow"],
@@ -34,7 +34,7 @@ export default {
               name:  props.currentRow.data.name
             }
             menuLoad(props.currentRow.data.catId).then(res=>{
-                console.log(res);
+               
             })
         }
         const rules = reactive({
@@ -52,4 +52,4 @@ export default {
 }
 </script>
 <style scoped></style>
-  
+  @/service/productService/product/product

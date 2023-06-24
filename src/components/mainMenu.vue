@@ -10,8 +10,8 @@
                     </el-icon>
                     <span>商品管理</span>
                 </template>
-                <el-menu-item index="2-1" @click="handleClick">分类维护</el-menu-item>
-                <el-menu-item index="2-4-1">item one</el-menu-item>
+                <el-menu-item index="2-1" ><router-link to="/category">分类维护</router-link></el-menu-item>
+                <el-menu-item index="2-4-1"><router-link to="/brand">品牌管理</router-link></el-menu-item>
             </el-sub-menu>
         </el-menu>
     </div>
@@ -36,4 +36,9 @@ export default defineComponent({
 })
 </script>
   
-<style scoped></style>
+<style scoped>
+a {
+  color: inherit;
+  text-decoration: none;
+}
+</style>

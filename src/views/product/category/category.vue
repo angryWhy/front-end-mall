@@ -40,9 +40,9 @@
 
 <script>
 import { defineComponent, ref, onMounted } from 'vue'
-import { menuList, menuAdd, menuDel,menuUpdate } from "@/service/product/product"
+import { menuList, menuAdd, menuDel,menuUpdate } from "@/service/productService/product/product"
 import { ElMessage, ElMessageBox } from 'element-plus'
-import formView from "./Form.vue"
+import formView from "../category/Form.vue"
 export default defineComponent({
     name: 'categoryView',
     components: {
@@ -192,4 +192,4 @@ export default defineComponent({
 })
 </script>
 
-<style scoped></style>
+<style scoped></style>@/service/productService/product/product
