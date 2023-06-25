@@ -3,7 +3,7 @@
         <el-input v-model="input" placeholder="检索名称" style="width:200px;" />
         <el-button style="margin-left:20px;" type="primary" @click="handleSearch">查询</el-button>
         <el-button style="margin-left:20px;" type="primary" @click="handleAdd">新增</el-button>
-        <el-table :data="tableData" style="width: 100%">
+        <el-table :data="tableData" style="width: 80%;margin-top:20px;">
             <el-table-column type="selection" width="55" />
             <el-table-column prop="brandId" label="品牌id" width="180" />
             <el-table-column prop="name" label="品牌名称" width="180" />

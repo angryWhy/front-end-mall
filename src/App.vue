@@ -1,7 +1,7 @@
 <template>
   
   <el-container>
-      <el-header class="header">商城</el-header>
+      <el-header class="header"><el-icon><Histogram /></el-icon>mall</el-header>
       <el-container>
         <el-aside width="200px"><menu-view/></el-aside>
         <el-main><router-view/></el-main>
@@ -23,9 +23,11 @@ export default defineComponent({
 </script>
 <style>
 .header{
-  background-color: rgb(150, 150, 233);
+  background-color: #303b4f;
   display: flex;
   justify-content: center;
   align-items: center;
+  color: #fff;
+
 }
 </style>
