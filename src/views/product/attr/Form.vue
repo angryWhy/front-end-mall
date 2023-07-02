@@ -2,20 +2,17 @@
     <div>
 
         <el-form :model="form" label-width="120px" v-loading="loading2" :rules="rules" ref="formRef">
-            <el-form-item label="品牌名称" prop="name">
-                <el-input v-model="form.name" />
+            <el-form-item label="属性名称" prop="attrGroupName">
+                <el-input v-model="form.attrGroupName" />
             </el-form-item>
             <el-form-item label="介绍">
                 <el-input v-model="form.descript" />
             </el-form-item>
-            <el-form-item label="显示状态">
-                <el-input v-model="form.showStatus" />
-            </el-form-item>
-            <el-form-item label="检索首字母">
-                <el-input v-model="form.firstLetter" />
-            </el-form-item>
             <el-form-item label="排序">
                 <el-input v-model="form.sort" />
+            </el-form-item>
+            <el-form-item label="分类id">
+                <el-cascader v-model="form.catelogId" :options="options" @change="handleChange" :props="prop" />
             </el-form-item>
             <el-form-item label="品牌logo">
                 <el-upload :show-file-list="false" :before-upload="handleUpload" :on-remove="handleRemove" action=""
@@ -36,9 +33,11 @@
 <script>
 import "element-plus/theme-chalk/el-message-box.css";
 
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { getPolicy } from "@/service/oss/oss"
 import axios from "axios";
+import { menuList } from "@/service/productService/product/product"
+import { attrLoad } from "@/service/productService/product/attr"
 export default {
     name: 'formView',
     props: ["loading", "currentRow"],
@@ -50,23 +49,28 @@ export default {
         const formRef = ref(null);
         const ossPolicy = ref();
         const fileList = ref([]);
+        const prop = ref({
+            value: "catId",
+            label: "name",
+            children: "children"
+        });
         const uploadData = ref(null);
+        const options = ref([]);
         const form = ref({
-            name: "",
+            attrGroupName: "",
             logo: "",
             descript: "",
-            showStatus: "",
-            firstLetter: "",
+            catelogId: "",
             sort: ""
         });
 
         if (props.currentRow != null) {
             form.value = {
-                name: props.currentRow.name,
+                attrGroupId: props.currentRow.attrGroupId,
+                attrGroupName: props.currentRow.attrGroupName,
                 logo: props.currentRow.logo,
                 descript: props.currentRow.descript,
-                showStatus: props.currentRow.showStatus,
-                firstLetter: props.currentRow.firstLetter,
+                catelogId: props.currentRow.catelogId,
                 sort: props.currentRow.sort,
             }
 
@@ -84,8 +88,8 @@ export default {
         const handleSuccess = (res) => {
         }
         //选择文件
-        const handleChange = (file) => {
-            fileList.value.push(file)
+        const handleChange = (value) => {
+            form.value.catelogId = value[2];
         }
         const handleUpload = (UploadFile) => {
             console.log(UploadFile);
@@ -113,7 +117,7 @@ export default {
             })
         }
         const rules = reactive({
-            name: [
+            attrGroupName: [
                 { required: true, message: '请输入家具', trigger: 'blur' }
             ]
         })
@@ -123,6 +127,18 @@ export default {
         ) => {
             console.log(response, uploadFile);
         }
+        onMounted(() => {
+            menuList().then(res => {
+                options.value = res.data;
+            })
+            if (props.currentRow) {
+                attrLoad(props.currentRow.attrGroupId).then(res => {
+                    form.value.catelogId = res.pmsAttrGroup.catelogPath;
+                    console.log();
+                })
+            }
+        });
+
         return {
             form,
             rules,
@@ -136,7 +152,9 @@ export default {
             handleUpload,
             ossPolicy,
             fileList,
-            uploadData
+            uploadData,
+            options,
+            prop
         }
     }
 }
