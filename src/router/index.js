@@ -3,13 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
   {
     path: '/',
-    redirect: "/about",
-  },
-  {
-    path: '/about',
-    name: 'about',
-
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    redirect: "/category",
   },
   {
     path: '/category',
@@ -28,8 +22,8 @@ const routes = [
   },
   {
     path: '/login',
-    name: 'login-admin',
-    component: () => import(/* webpackChunkName: "about" */ '../views/login/login-admin.vue')
+    name: 'loginView',
+    component: () => import(/* webpackChunkName: "about" */ '../views/login/loginView.vue')
   }
 ]
 

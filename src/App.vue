@@ -1,5 +1,4 @@
 <template>
-  
   <el-container>
       <el-header class="header"><el-icon><Histogram /></el-icon>mall</el-header>
       <el-container>

@@ -3,7 +3,7 @@ module.exports = defineConfig({
   transpileDependencies: true,
   lintOnSave:false,
   devServer: {
-    port: 8003, // 启动端口号
-    open: true, // 
+    port: 8003, 
+    open: true, 
   }
 })

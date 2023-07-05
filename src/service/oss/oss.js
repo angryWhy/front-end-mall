@@ -9,6 +9,5 @@ export function getUpload(params){
     axios({
         method: "POST",
         ...params,
-        
     })
 }

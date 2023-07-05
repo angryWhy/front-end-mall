@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-input v-model="input" placeholder="检索名称" style="width:200px;" />
+        <el-input v-model="key" placeholder="检索名称" style="width:200px;" />
         <el-button style="margin-left:20px;" type="primary" @click="handleSearch">查询</el-button>
         <el-button style="margin-left:20px;" type="primary" @click="handleAdd">新增</el-button>
         <el-table :data="tableData" style="width: 80%;margin-top:20px;">
@@ -14,7 +14,7 @@
             <el-table-column fixed="right" label="操作" width="120">
                 <template #default="scope">
                     <el-button link type="primary" @click="handleEdit(scope.row)">编辑</el-button>
-                    <el-button link type="danger">删除</el-button>
+                    <el-button link type="danger" @click="handleDel(scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -60,8 +60,9 @@ export default defineComponent({
         const editDialogVisible = ref(false);
         const tableData = ref([]);
         const currentChose = ref('');
+        const key = ref();
         const pagination = ref({
-            pageIndex: 1,
+            page: 1,
             pageSize: 20,
             totalcount: 0,
         });
@@ -75,6 +76,7 @@ export default defineComponent({
         };
         const loadTableData = () => {
             brandList({
+                key:key.value,
                 pageIndex:pagination.value.pageIndex,
                 pageSize:pagination.value.pageSize
             }).then(res=>{
@@ -118,6 +120,14 @@ export default defineComponent({
                 }
             })
         }
+        const handleSearch = () => {
+            loadTableData()
+        }
+        const handleDel = (row) => {
+            brandDel([row.brandId]).then(res=>{
+                loadTableData();
+            })
+        }
         //编辑提交事件
         const onEdit = (data) => {
             let formRef = data.formRef;
@@ -153,7 +163,10 @@ export default defineComponent({
             handleEdit,
             onSubmit,
             onEdit,
-            currentChose
+            currentChose,
+            handleSearch,
+            key,
+            handleDel
         }
     }
 })

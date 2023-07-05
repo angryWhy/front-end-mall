@@ -13,7 +13,7 @@
             </el-aside>
             <el-main>
                 <div>
-                    <el-input v-model="input" placeholder="检索名称" style="width:200px;" />
+                    <el-input v-model="key" placeholder="检索名称" style="width:200px;" />
                     <el-button style="margin-left:20px;" type="primary" @click="handleSearch">查询</el-button>
                     <el-button style="margin-left:20px;" type="primary" @click="handleAdd">新增</el-button>
                     <el-table :data="tableData" style="width: 80%;margin-top:20px;">
@@ -112,7 +112,6 @@ export default defineComponent({
             if (node.level == 3) {
                 catelogId.value = data.catId
                 attrList({
-
                     key: key.value
                 }, catelogId.value).then(res => {
                     if (res.code == 0) {
@@ -155,6 +154,9 @@ export default defineComponent({
             addDialogVisible.value = true;
 
         }
+        const handleSearch = () => {
+            loadTableData()
+        }
         const handleEdit = (row) => {
             editDialogVisible.value = true;
             currentChose.value = row;
@@ -195,7 +197,10 @@ export default defineComponent({
             addDialogVisible,
             editDialogVisible,
             handleAdd,
-            handleEdit
+            handleEdit,
+            key,
+            loadTableData,
+            handleSearch
         }
     }
 })
