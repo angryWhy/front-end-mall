@@ -44,7 +44,7 @@
             </form-view>
         </el-dialog>
         <el-dialog v-model="relationDialogVisible" title="关联" width="650px" center destroy-on-close="true" @close="handleClose">
-            <relation :loading="loading" :currentRow="currentChose">
+            <relation :loading="loading" :currentRow="currentChose"  @handleClose="handleClose">
               
             </relation>
         </el-dialog>

@@ -1,27 +1,54 @@
 <template>
     <div>
+
         <el-form :model="form" label-width="120px" v-loading="loading2" :rules="rules" ref="formRef">
-            <el-form-item label="新增关联" prop="name" style="width:600px;">
+            <el-form-item label="属性名">
+                <el-input v-model="form.attrName" />
+            </el-form-item>
+            <el-form-item label="是否需要检索">
+                <el-input v-model="form.searchType" />
+            </el-form-item>
+            <el-form-item label="icon">
+                <el-input v-model="form.icon" />
+            </el-form-item>
+            <el-form-item label="可选值">
+                <el-input v-model="form.valueSelect" />
+            </el-form-item>
+            <el-form-item label="属性类型">
+                <el-select v-model="form.attrType" class="m-2" style="width:100%;">
+                    <el-option label="销售属性" value="0" />
+                    <el-option label="基本属性" value="1" />
+                    <el-option label="全选" value="2" />
+                </el-select>
+            </el-form-item>
+            <el-form-item label="启用状态">
+                <el-select v-model="form.enable" class="m-2" style="width:100%;">
+                    <el-option label="禁用" value="0" />
+                    <el-option label="启用" value="1" />
+                </el-select>
+            </el-form-item>
+            <el-form-item label="所属分类" >
                 <el-cascader v-model="form.catelogId" :options="dataMenu" @change="handleNodeClick" :props="defaultProps"
-                    ref="cascader" />
+                    ref="cascader" style="width:100%;"/>
+            </el-form-item>
+            <el-form-item label="所属分组" >
+                <el-select v-model="form.enable" class="m-2" style="width:100%;">              
+                    <template v-for="item in category" :key="item">
+                        <el-option :label="item.attrGroupName" :value="item.attrGroupId" />
+                    </template>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="快速展示">
+                <el-select v-model="form.showDesc" class="m-2" style="width:100%;">
+                    <el-option label="否" value="0" />
+                    <el-option label="是" value="1" />
+                </el-select>
+            </el-form-item>
+            <el-form-item>
+                <slot name="ok" :form="form" :formRef="formRef"></slot>
+                <slot name="cancel"></slot>
             </el-form-item>
         </el-form>
-        <el-table :data="tableData" style="width: 100%;margin-top:20px;">
-            <el-table-column type="selection" width="55" />
-            <el-table-column prop="brandId" label="品牌id" />
-            <el-table-column prop="brandName" label="品牌名称" />
-            <el-table-column prop="catelogId" label="分类id" />
-            <el-table-column prop="catelogName" label="分类名称" />
-            <el-table-column fixed="right" label="操作" width="120">
-                <template #default="scope">
-                    <el-button link type="danger" @click="handleDel(scope.row)">删除</el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-        <div class="bottom-btn">
-            <el-button type="primary" @click="onSubmit(form)">添加</el-button>
-            <el-button @click="handleClose">取消</el-button>
-        </div>
     </div>
 </template>
 <script>
@@ -30,52 +57,51 @@ import "element-plus/theme-chalk/el-message-box.css";
 import { ref, reactive, onMounted } from "vue";
 import { getPolicy } from "@/service/oss/oss"
 import axios from "axios";
-import { ElMessage, ElMessageBox } from 'element-plus'
 import { menuList } from "@/service/productService/product/product"
-import { relationSave, relationList } from "@/service/productService/product/brandRealtion"
+import { attrLoad,attrList,attrList2 } from "@/service/productService/product/attr"
 export default {
     name: 'formView',
     props: ["loading", "currentRow"],
-    emits: ["handleClose"],
     components: {
 
     },
-    setup(props, ctx) {
+    setup(props) {
         const imageUrl = ref('');
         const formRef = ref(null);
         const ossPolicy = ref();
         const fileList = ref([]);
-        const uploadData = ref(null);
         const dataMenu = ref();
-        const tableData = ref([]);
-        const cascader = ref(null);
-        const form = ref({
-            catelogId: "",
-            name: props.currentRow.name,
-            brandId: props.currentRow.brandId,
-            catelogName: ""
+        const prop = ref({
+            value: "catId",
+            label: "name",
+            children: "children"
         });
-        const handleNodeClick = (value) => {
-            console.log(value, form.value.catelogId);
-            const data = cascader.value.getCheckedNodes()[0].data;
-            form.value.catelogId = data.catId;
-            form.value.catelogName = data.name;
+        const cascader = ref(null);
+        const uploadData = ref(null);
+        const options = ref([]);
+        const category = ref([])
+        const form = ref({
+            attrName: "",
+            searchType: "",
+            icon: "",
+            valueSelect: "",
+            attrType: "0",
+            enable: "1",
+            catelogId: "",
+            showDesc: "1"
+        });
+
+        if (props.currentRow != null) {
+            form.value = {
+                attrGroupId: props.currentRow.attrGroupId,
+                attrGroupName: props.currentRow.attrGroupName,
+                logo: props.currentRow.logo,
+                descript: props.currentRow.descript,
+                catelogId: props.currentRow.catelogId,
+                sort: props.currentRow.sort,
+            }
+
         }
-        const loadTableData = () => {
-            relationList({
-                brandId: props.currentRow.brandId
-            }).then(res => {
-                if (res.code == 0) {
-                    tableData.value = res.data;
-                }
-            })
-        }
-        onMounted(() => {
-            menuList().then(res => {
-                dataMenu.value = res.data;
-            })
-            loadTableData();
-        })
         const handleExceed = (files, fileList) => {
             console.log(files)
             uploadRef.value.clearFiles()  //清空上传文件（限制一个，所以直接清空即可）
@@ -89,8 +115,8 @@ export default {
         const handleSuccess = (res) => {
         }
         //选择文件
-        const handleChange = (file) => {
-            fileList.value.push(file)
+        const handleChange = (value) => {
+            form.value.catelogId = value[2];
         }
         const handleUpload = (UploadFile) => {
             console.log(UploadFile);
@@ -118,7 +144,7 @@ export default {
             })
         }
         const rules = reactive({
-            name: [
+            attrGroupName: [
                 { required: true, message: '请输入家具', trigger: 'blur' }
             ]
         })
@@ -128,32 +154,32 @@ export default {
         ) => {
             console.log(response, uploadFile);
         }
+        onMounted(() => {
+            menuList().then(res => {
+                dataMenu.value = res.data;
+            })
+            if (props.currentRow) {
+                attrLoad(props.currentRow.attrGroupId).then(res => {
+                    form.value.catelogId = res.pmsAttrGroup.catelogPath;
+                    console.log();
+                })
+            }
+        });
+        const handleNodeClick = (value) => {
+            console.log(value, form.value.catelogId);
+            const data = cascader.value.getCheckedNodes()[0].data;
+            form.value.catelogId = data.catId;
+            form.value.catelogName = data.name;
+            attrList2(form.value.catelogId).then(res => {
+                    if (res.code == 0) {
+                        category.value = res.page.list;
+                    }
+                })
+        }
         const defaultProps = {
             children: 'children',
             label: 'name',
             value: 'catId'
-        }
-        const onSubmit = () => {
-            relationSave({
-                ...form.value
-            }).then(res => {
-                if (res.code == 0) {
-
-                    ElMessage({
-                        message: '关联成功',
-                        type: 'success',
-                    })
-                    loadTableData();
-                } else {
-                    ElMessage.error('关联失败')
-                }
-            })
-        }
-        const handleClose = () => {
-            ctx.emit("handleClose");
-        }
-        const handleDel = () => {
-
         }
         return {
             form,
@@ -169,15 +195,13 @@ export default {
             ossPolicy,
             fileList,
             uploadData,
+            options,
+            prop,
+            cascader,
             handleNodeClick,
             dataMenu,
             defaultProps,
-            tableData,
-            cascader,
-            loadTableData,
-            onSubmit,
-            handleClose,
-            handleDel
+            category
         }
     }
 }
@@ -209,11 +233,5 @@ export default {
     width: 50px;
     height: 50px;
     text-align: center;
-}
-
-.bottom-btn {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
 }
 </style>

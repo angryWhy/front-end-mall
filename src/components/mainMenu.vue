@@ -11,7 +11,8 @@
                 </template>
                 <el-menu-item index="2-1" ><router-link to="/category">分类维护</router-link></el-menu-item>
                 <el-menu-item index="2-4-1"><router-link to="/brand">品牌管理</router-link></el-menu-item>
-                <el-menu-item index="2-4-2"><router-link to="/attr">属性分组</router-link></el-menu-item>
+                <el-menu-item index="2-4-2"><router-link to="/attrgroup">属性分组</router-link></el-menu-item>
+                <el-menu-item index="2-4-3"><router-link to="/attr">规格参数</router-link></el-menu-item>
             </el-sub-menu>
         </el-menu>
     </div>

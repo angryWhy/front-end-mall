@@ -1,8 +1,8 @@
 import request from '../request';
 //springboot接口
-export function brandList(params){
+export function relationList(params){
     return request({
-        url:"/product/pmsbrand/list",
+        url:"/product/pmscategorybrandrelation/catelog/list",
         params
     })
 }

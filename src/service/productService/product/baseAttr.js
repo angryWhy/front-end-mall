@@ -6,11 +6,6 @@ export function attrList(params,id){
         params
     })
 }
-export function attrList2(id){
-    return request({
-        url:`product/pmsattrgroup/list/${id}`
-    })
-}
 export function attrAdd(params){
     return request({
         url:"/product/pmsattrgroup/save",

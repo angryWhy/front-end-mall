@@ -16,9 +16,14 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/product/brand/brand.vue')
   },
   {
+    path: '/attrgroup',
+    name: 'attrGroupView',
+    component: () => import(/* webpackChunkName: "about" */ '../views/product/attr/attr.vue')
+  },
+  {
     path: '/attr',
     name: 'attrView',
-    component: () => import(/* webpackChunkName: "about" */ '../views/product/attr/attr.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/product/baseAttr/attr.vue')
   },
   {
     path: '/login',
