@@ -6,9 +6,9 @@ export function brandList(params){
         params
     })
 }
-export function brandAdd(params){
+export function relationSave(params){
     return request({
-        url:"/product/pmsbrand/save",
+        url:"/product/pmscategorybrandrelation/save",
         data:params,
         method:"POST"
     })

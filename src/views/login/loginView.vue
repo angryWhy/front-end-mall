@@ -1,6 +1,6 @@
 <template>
     <div class="main">
-        <div class="content">
+        <!-- <div class="content">
             <div class="login-left">
                 <img src="../../assets//images/login-card.png" class="login-pic" />
             </div>
@@ -49,7 +49,7 @@
                     <div class="btn">登录</div>
                 </el-form>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -73,7 +73,7 @@ const form = reactive({
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url("../../assets//images/login-bg.png");
+    /* background-image: url("../../assets//images/login-bg.png"); */
     background-repeat: no-repeat;
     background-size: 100% 100%;
     background-attachment: fixed;

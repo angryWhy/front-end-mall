@@ -3,7 +3,7 @@
         <el-input v-model="key" placeholder="检索名称" style="width:200px;" />
         <el-button style="margin-left:20px;" type="primary" @click="handleSearch">查询</el-button>
         <el-button style="margin-left:20px;" type="primary" @click="handleAdd">新增</el-button>
-        <el-table :data="tableData" style="width: 80%;margin-top:20px;">
+        <el-table :data="tableData" style="width: 100%;margin-top:20px;">
             <el-table-column type="selection" width="55" />
             <el-table-column prop="brandId" label="品牌id" width="180" />
             <el-table-column prop="name" label="品牌名称" width="180" />
@@ -11,8 +11,9 @@
             <el-table-column prop="showStatus" label="显示状态" />
             <el-table-column prop="firstLetter" label="检索首字母" />
             <el-table-column prop="sort" label="排序" />
-            <el-table-column fixed="right" label="操作" width="120">
+            <el-table-column fixed="right" label="操作" width="200">
                 <template #default="scope">
+                    <el-button link type="primary" @click="handleRelated(scope.row)">关联分类</el-button>
                     <el-button link type="primary" @click="handleEdit(scope.row)">编辑</el-button>
                     <el-button link type="danger" @click="handleDel(scope.row)">删除</el-button>
                 </template>
@@ -42,6 +43,11 @@
                 </template>
             </form-view>
         </el-dialog>
+        <el-dialog v-model="relationDialogVisible" title="关联" width="650px" center destroy-on-close="true" @close="handleClose">
+            <relation :loading="loading" :currentRow="currentChose">
+              
+            </relation>
+        </el-dialog>
     </div>
 </template>
 
@@ -50,14 +56,17 @@ import { defineComponent, ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {brandAdd,brandDel,brandList,brandLoad,brandUpdate} from "@/service/productService/product/brand"
 import formView from "./Form.vue"
+import relation from './relation.vue'
 export default defineComponent({
     name: 'brandView',
     components: {
-        formView
+        formView,
+        relation
     },
     setup() {
         const addDialogVisible = ref(false);
         const editDialogVisible = ref(false);
+        const relationDialogVisible = ref(false);
         const tableData = ref([]);
         const currentChose = ref('');
         const key = ref();
@@ -90,6 +99,7 @@ export default defineComponent({
             addDialogVisible.value = true;
 
         }
+      
         const handleEdit = (row) => {
             editDialogVisible.value = true;
             currentChose.value = row;
@@ -128,6 +138,10 @@ export default defineComponent({
                 loadTableData();
             })
         }
+        const handleRelated = (row) => {
+            relationDialogVisible.value = true;
+            currentChose.value = row;
+        }
         //编辑提交事件
         const onEdit = (data) => {
             let formRef = data.formRef;
@@ -152,6 +166,11 @@ export default defineComponent({
                 }
             })
         }
+        const handleClose = () => {
+            addDialogVisible.value = false;
+            editDialogVisible.value = false;
+            relationDialogVisible.value = false;
+        }
         return {
             addDialogVisible,
             editDialogVisible,
@@ -166,7 +185,10 @@ export default defineComponent({
             currentChose,
             handleSearch,
             key,
-            handleDel
+            handleDel,
+            handleRelated,
+            relationDialogVisible,
+            handleClose
         }
     }
 })
