@@ -8,7 +8,7 @@ export function attrList(params,id){
 }
 export function attrAdd(params){
     return request({
-        url:"/product/pmsattrgroup/save",
+        url:"/product/pmsattr/save",
         data:params,
         method:"POST"
     })

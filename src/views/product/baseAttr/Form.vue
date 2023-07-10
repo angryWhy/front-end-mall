@@ -6,7 +6,10 @@
                 <el-input v-model="form.attrName" />
             </el-form-item>
             <el-form-item label="是否需要检索">
-                <el-input v-model="form.searchType" />
+                <el-select v-model="form.searchType" class="m-2" style="width:100%;">
+                    <el-option label="需要" value="1" />
+                    <el-option label="不需要" value="0" />
+                </el-select>
             </el-form-item>
             <el-form-item label="icon">
                 <el-input v-model="form.icon" />
@@ -32,7 +35,7 @@
                     ref="cascader" style="width:100%;"/>
             </el-form-item>
             <el-form-item label="所属分组" >
-                <el-select v-model="form.enable" class="m-2" style="width:100%;">              
+                <el-select v-model="form.attrGroupId" class="m-2" style="width:100%;">              
                     <template v-for="item in category" :key="item">
                         <el-option :label="item.attrGroupName" :value="item.attrGroupId" />
                     </template>
@@ -88,7 +91,8 @@ export default {
             attrType: "0",
             enable: "1",
             catelogId: "",
-            showDesc: "1"
+            showDesc: "1",
+            attrGroupId:""
         });
 
         if (props.currentRow != null) {

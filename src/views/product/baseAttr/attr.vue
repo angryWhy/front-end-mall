@@ -69,7 +69,7 @@ import { defineComponent, ref, onMounted } from 'vue'
 import { menuList } from "@/service/productService/product/product"
 import { ElMessage, ElMessageBox } from 'element-plus'
 import formView from "./Form.vue"
-import { attrList,attrAdd,attrUpdate  } from "@/service/productService/product/attr"
+import { attrList,attrAdd,attrUpdate  } from "@/service/productService/product/baseAttr"
 export default defineComponent({
     name: 'categoryView',
     components: {
