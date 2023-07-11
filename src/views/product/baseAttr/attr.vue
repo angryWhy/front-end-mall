@@ -18,12 +18,14 @@
                     <el-button style="margin-left:20px;" type="primary" @click="handleAdd">新增</el-button>
                     <el-table :data="tableData" style="width: 80%;margin-top:20px;">
                         <el-table-column type="selection" width="55" />
-                        <el-table-column prop="attrGroupId" label="属性id" width="180" />
-                        <el-table-column prop="attrGroupName" label="属性名称" width="180" />
-                        <el-table-column prop="catelogId" label="分类id" />
-                        <el-table-column prop="descript" label="描述" />
+                        <el-table-column prop="attrId" label="属性id"  />
+                        <el-table-column prop="attrName" label="属性名称"  />
+                        <el-table-column prop="catelogName" label="分类名称"  />
+                        <el-table-column prop="groupName" label="分组名称"  />
+                        <el-table-column prop="searchType" label="可检索" />
+                        <el-table-column prop="showDesc" label="快速展示" />
+                        <el-table-column prop="enable" label="启用" />
                         <el-table-column prop="icon" label="图标" />
-                        <el-table-column prop="sort" label="排序" />
                         <el-table-column fixed="right" label="操作" width="120">
                             <template #default="scope">
                                 <el-button link type="primary" @click="handleEdit(scope.row)">编辑</el-button>
@@ -81,7 +83,7 @@ export default defineComponent({
         const catelogId = ref(0);
         const addDialogVisible = ref(false);
         const editDialogVisible = ref(false);
-        const key = ref(1);
+        const key = ref("");
         const tableData = ref([]);
         const pagination = ref({
             pageIndex: 1,
@@ -92,7 +94,7 @@ export default defineComponent({
             attrList({
                 key: key.value
             }, catelogId.value).then(res => {
-                if (res.code == 0 && res.page.list.length > 0) {
+                if (res.code == 0 ) {
                     tableData.value = res.page.list;
                 }
             })

@@ -97,12 +97,15 @@ export default {
 
         if (props.currentRow != null) {
             form.value = {
+                attrName: props.currentRow.attrName,
+                searchType: Number(props.currentRow.searchType),
+                icon: props.currentRow.icon,
+                valueSelect: props.currentRow.valueSelect,
+                attrType: Number(props.currentRow.attrType),
+                enable: Number(props.currentRow.enable),
                 attrGroupId: props.currentRow.attrGroupId,
-                attrGroupName: props.currentRow.attrGroupName,
-                logo: props.currentRow.logo,
-                descript: props.currentRow.descript,
                 catelogId: props.currentRow.catelogId,
-                sort: props.currentRow.sort,
+                showDesc: Number(props.currentRow.showDesc),
             }
 
         }
@@ -165,7 +168,6 @@ export default {
             if (props.currentRow) {
                 attrLoad(props.currentRow.attrGroupId).then(res => {
                     form.value.catelogId = res.pmsAttrGroup.catelogPath;
-                    console.log();
                 })
             }
         });
@@ -176,6 +178,7 @@ export default {
             form.value.catelogName = data.name;
             attrList2(form.value.catelogId).then(res => {
                     if (res.code == 0) {
+                        form.value.attrGroupId = "";
                         category.value = res.page.list;
                     }
                 })

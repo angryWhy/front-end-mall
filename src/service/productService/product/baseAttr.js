@@ -2,7 +2,7 @@ import request from '../request';
 //springboot接口
 export function attrList(params,id){
     return request({
-        url:`product/pmsattrgroup/list/${id}`,
+        url:`/product/pmsattr/base/list/${id}`,
         params
     })
 }
@@ -22,13 +22,13 @@ export function attrdDel(params){
 }
 export function attrLoad(params){
     return request({
-        url:`/product/pmsattrgroup/info/${params}`,
+        url:`/product/pmsattr/info/${params}`,
         
     })
 }
 export function attrUpdate(params){
     return request({
-        url:`/product/pmsattrgroup/update`,
+        url:`/product/pmsattr/update`,
         data:params,
         method:"POST"
     })
