@@ -61,7 +61,7 @@ import { ref, reactive, onMounted } from "vue";
 import { getPolicy } from "@/service/oss/oss"
 import axios from "axios";
 import { menuList } from "@/service/productService/product/product"
-import { attrLoad,attrList,attrList2 } from "@/service/productService/product/attr"
+import { attrLoad,attrList2 } from "@/service/productService/product/attr"
 export default {
     name: 'formView',
     props: ["loading", "currentRow"],
@@ -103,9 +103,10 @@ export default {
                 valueSelect: props.currentRow.valueSelect,
                 attrType: Number(props.currentRow.attrType),
                 enable: Number(props.currentRow.enable),
-                attrGroupId: props.currentRow.attrGroupId,
+                attrGroupId: Number(props.currentRow.attrGroupId),
                 catelogId: props.currentRow.catelogId,
                 showDesc: Number(props.currentRow.showDesc),
+                attrId:props.currentRow.attrId
             }
 
         }
