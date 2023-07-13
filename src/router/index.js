@@ -26,6 +26,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/product/baseAttr/attr.vue')
   },
   {
+    path: '/saleattr',
+    name: 'saleAttrView',
+    component: () => import(/* webpackChunkName: "about" */ '../views/product/saleAttr/saleAttr.vue')
+  },
+  {
     path: '/login',
     name: 'loginView',
     component: () => import(/* webpackChunkName: "about" */ '../views/login/loginView.vue')

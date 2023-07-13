@@ -18,15 +18,16 @@
                     <el-button style="margin-left:20px;" type="primary" @click="handleAdd">新增</el-button>
                     <el-table :data="tableData" style="width: 80%;margin-top:20px;">
                         <el-table-column type="selection" width="55" />
-                        <el-table-column prop="attrGroupId" label="属性id" width="180" />
-                        <el-table-column prop="attrGroupName" label="属性名称" width="180" />
-                        <el-table-column prop="catelogId" label="分类id" />
-                        <el-table-column prop="descript" label="描述" />
+                        <el-table-column prop="attrId" label="属性id"  />
+                        <el-table-column prop="attrName" label="属性名称"  />
+                        <el-table-column prop="catelogName" label="分类名称"  />
+                        <el-table-column prop="groupName" label="分组名称"  />
+                        <el-table-column prop="searchType" label="可检索" />
+                        <el-table-column prop="showDesc" label="快速展示" />
+                        <el-table-column prop="enable" label="启用" />
                         <el-table-column prop="icon" label="图标" />
-                        <el-table-column prop="sort" label="排序" />
-                        <el-table-column fixed="right" label="操作" width="200">
+                        <el-table-column fixed="right" label="操作" width="120">
                             <template #default="scope">
-                                <el-button link type="primary" @click="handleRelated(scope.row)">关联</el-button>
                                 <el-button link type="primary" @click="handleEdit(scope.row)">编辑</el-button>
                                 <el-button link type="danger">删除</el-button>
                             </template>
@@ -59,11 +60,6 @@
                             </template>
                         </form-view>
                     </el-dialog>
-                    <el-dialog v-model="relationDialogVisible" title="关联" width="650px" center destroy-on-close="true"
-                        @close="handleClose">
-                        <relation :loading="loading" :currentRow="currentChose" @handleClose="handleClose">
-                        </relation>
-                    </el-dialog>
                 </div>
             </el-main>
         </el-container>
@@ -75,13 +71,11 @@ import { defineComponent, ref, onMounted } from 'vue'
 import { menuList } from "@/service/productService/product/product"
 import { ElMessage, ElMessageBox } from 'element-plus'
 import formView from "./Form.vue"
-import relation from './relation.vue'
-import { attrList, attrAdd, attrUpdate } from "@/service/productService/product/attr"
+import { attrList,attrAdd,attrUpdate  } from "@/service/productService/product/saleAttr"
 export default defineComponent({
-    name: 'categoryView',
+    name: 'saleAttrView',
     components: {
-        formView,
-        relation
+        formView
     },
     setup() {
         const dataMenu = ref([]);
@@ -89,9 +83,8 @@ export default defineComponent({
         const catelogId = ref(0);
         const addDialogVisible = ref(false);
         const editDialogVisible = ref(false);
-        const key = ref(1);
+        const key = ref("");
         const tableData = ref([]);
-        const relationDialogVisible = ref(false);
         const pagination = ref({
             pageIndex: 1,
             pageSize: 20,
@@ -101,7 +94,7 @@ export default defineComponent({
             attrList({
                 key: key.value
             }, catelogId.value).then(res => {
-                if (res.code == 0 && res.page.list.length > 0) {
+                if (res.code == 0 ) {
                     tableData.value = res.page.list;
                 }
             })
@@ -170,10 +163,6 @@ export default defineComponent({
             editDialogVisible.value = true;
             currentChose.value = row;
         }
-        const handleRelated = (row) => {
-            relationDialogVisible.value = true;
-            currentChose.value = row;
-        }
         //编辑提交事件
         const onEdit = (data) => {
             let formRef = data.formRef;
@@ -196,11 +185,6 @@ export default defineComponent({
                 }
             })
         }
-        const handleClose = () => {
-            addDialogVisible.value = false;
-            editDialogVisible.value = false;
-            relationDialogVisible.value = false;
-        }
         return {
             dataMenu,
             defaultProps,
@@ -218,10 +202,7 @@ export default defineComponent({
             handleEdit,
             key,
             loadTableData,
-            handleSearch,
-            relationDialogVisible,
-            handleRelated,
-            handleClose
+            handleSearch
         }
     }
 })
