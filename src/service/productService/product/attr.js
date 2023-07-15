@@ -6,6 +6,11 @@ export function attrList(params,id){
         params
     })
 }
+export function attrRelationList(id){
+    return request({
+        url:`product/pmsattrgroup/${id}/attr/relation`
+    })
+}
 export function attrList2(id){
     return request({
         url:`product/pmsattrgroup/list/${id}`
@@ -21,6 +26,13 @@ export function attrAdd(params){
 export function attrdDel(params){
     return request({
         url:"/product/pmsbrand/delete",
+        data:params,
+        method:"POST"
+    })
+}
+export function attrRelationDelete(params){
+    return request({
+        url:`product/pmsattr/relation/delete`,
         data:params,
         method:"POST"
     })

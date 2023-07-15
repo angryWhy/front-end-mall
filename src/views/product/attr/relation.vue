@@ -8,10 +8,9 @@
         </el-form>
         <el-table :data="tableData" style="width: 100%;margin-top:20px;">
             <el-table-column type="selection" width="55" />
-            <el-table-column prop="brandId" label="品牌id" />
-            <el-table-column prop="brandName" label="品牌名称" />
-            <el-table-column prop="catelogId" label="分类id" />
-            <el-table-column prop="catelogName" label="分类名称" />
+            <el-table-column prop="attrId" label="属性id" />
+            <el-table-column prop="attrName" label="属性名称" />
+            <el-table-column prop="valueSelect" label="可选值" />
             <el-table-column fixed="right" label="操作" width="120">
                 <template #default="scope">
                     <el-button link type="danger" @click="handleDel(scope.row)">删除</el-button>
@@ -32,7 +31,8 @@ import { getPolicy } from "@/service/oss/oss"
 import axios from "axios";
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { menuList } from "@/service/productService/product/product"
-import { relationSave, relationList } from "@/service/productService/product/brandRealtion"
+import { relationSave } from "@/service/productService/product/brandRealtion"
+import { attrRelationList, attrRelationDelete } from "@/service/productService/product/attr"
 export default {
     name: 'formView',
     props: ["loading", "currentRow"],
@@ -62,11 +62,10 @@ export default {
             form.value.catelogName = data.name;
         }
         const loadTableData = () => {
-            relationList({
-                brandId: props.currentRow.brandId
-            }).then(res => {
+            attrRelationList(props.currentRow.attrGroupId
+            ).then(res => {
                 if (res.code == 0) {
-                    tableData.value = res.data;
+                    tableData.value = res.page;
                 }
             })
         }
@@ -138,7 +137,6 @@ export default {
                 ...form.value
             }).then(res => {
                 if (res.code == 0) {
-
                     ElMessage({
                         message: '关联成功',
                         type: 'success',
@@ -152,8 +150,23 @@ export default {
         const handleClose = () => {
             ctx.emit("handleClose");
         }
-        const handleDel = () => {
+        const handleDel = (row) => {
+            attrRelationDelete([{
+                attrId: row.attrId,
+                attrGroupId: props.currentRow.attrGroupId
+            }]).then(res => {
+                if (res.code == 0) {
 
+                    ElMessage({
+                        message: '删除成功',
+                        type: 'success',
+                    })
+                    loadTableData();
+                } else {
+                    ElMessage.error('删除失败')
+                }
+            })
+            loadTableData();
         }
         return {
             form,
