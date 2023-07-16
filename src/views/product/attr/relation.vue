@@ -1,10 +1,28 @@
 <template>
+    <template>
+        <el-dialog v-model="innerVisible" width="30%" title="关联列表" append-to-body>
+            <el-form>
+                <el-form-item label="检索" >
+                    <el-input v-model="innerKey" />
+                </el-form-item>
+                <el-button @click="loadInnerData">查询</el-button>
+            </el-form>
+            <el-table :data="innerData" style="width: 100%;margin-top:20px;">
+                <el-table-column type="selection" width="55" />
+                <el-table-column prop="attrId" label="属性id" />
+                <el-table-column prop="attrName" label="属性名称" />
+                <el-table-column prop="valueSelect" label="可选值" />
+                <el-table-column fixed="right" label="操作" width="120">
+                    <template #default="scope">
+                        <el-button link type="danger" @click="handleRel(scope.row)">关联</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-dialog>
+    </template>
     <div>
-        <el-form :model="form" label-width="120px" v-loading="loading2" :rules="rules" ref="formRef">
-            <el-form-item label="新增关联" prop="name" style="width:600px;">
-                <el-cascader v-model="form.catelogId" :options="dataMenu" @change="handleNodeClick" :props="defaultProps"
-                    ref="cascader" />
-            </el-form-item>
+        <el-form>
+            <el-button @click="handleInner">新建关联</el-button>
         </el-form>
         <el-table :data="tableData" style="width: 100%;margin-top:20px;">
             <el-table-column type="selection" width="55" />
@@ -21,6 +39,7 @@
             <el-button type="primary" @click="onSubmit(form)">添加</el-button>
             <el-button @click="handleClose">取消</el-button>
         </div>
+
     </div>
 </template>
 <script>
@@ -32,7 +51,7 @@ import axios from "axios";
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { menuList } from "@/service/productService/product/product"
 import { relationSave } from "@/service/productService/product/brandRealtion"
-import { attrRelationList, attrRelationDelete } from "@/service/productService/product/attr"
+import { attrRelationList, attrRelationDelete,attrNoRelationList,attrRelation } from "@/service/productService/product/attr"
 export default {
     name: 'formView',
     props: ["loading", "currentRow"],
@@ -49,6 +68,9 @@ export default {
         const dataMenu = ref();
         const tableData = ref([]);
         const cascader = ref(null);
+        const innerVisible = ref(false);
+        const innerKey = ref();
+        const innerData = ref();
         const form = ref({
             catelogId: "",
             name: props.currentRow.name,
@@ -61,6 +83,14 @@ export default {
             form.value.catelogId = data.catId;
             form.value.catelogName = data.name;
         }
+        const loadInnerData = () => {
+            attrNoRelationList(props.currentRow.attrGroupId
+            ).then(res => {
+                if (res.code == 0) {
+                    innerData.value = res.page.list;
+                }
+            })
+        }
         const loadTableData = () => {
             attrRelationList(props.currentRow.attrGroupId
             ).then(res => {
@@ -68,6 +98,25 @@ export default {
                     tableData.value = res.page;
                 }
             })
+        }
+        const handleRel = (row) => {
+            attrRelation([
+                {
+                    attrGroupId:props.currentRow.attrGroupId,
+                    attrId:row.attrId
+                }
+            ]).then(res=>{
+                if (res.code == 0) {
+                    ElMessage({
+                        message: '关联成功',
+                        type: 'success',
+                    })
+                    loadInnerData();
+                } else {
+                    ElMessage.error('关联失败')
+                }
+            })
+            
         }
         onMounted(() => {
             menuList().then(res => {
@@ -149,6 +198,7 @@ export default {
         }
         const handleClose = () => {
             ctx.emit("handleClose");
+            innerVisible.value = false;
         }
         const handleDel = (row) => {
             attrRelationDelete([{
@@ -167,6 +217,10 @@ export default {
                 }
             })
             loadTableData();
+        }
+        const handleInner = () => {
+            innerVisible.value = true;
+            loadInnerData();
         }
         return {
             form,
@@ -190,7 +244,13 @@ export default {
             loadTableData,
             onSubmit,
             handleClose,
-            handleDel
+            handleDel,
+            innerVisible,
+            innerKey,
+            loadInnerData,
+            handleInner,
+            innerData,
+            handleRel
         }
     }
 }

@@ -11,6 +11,11 @@ export function attrRelationList(id){
         url:`product/pmsattrgroup/${id}/attr/relation`
     })
 }
+export function attrNoRelationList(id){
+    return request({
+        url:`product/pmsattrgroup/${id}/attr/norelation`
+    })
+}
 export function attrList2(id){
     return request({
         url:`product/pmsattrgroup/list/${id}`
@@ -19,6 +24,13 @@ export function attrList2(id){
 export function attrAdd(params){
     return request({
         url:"/product/pmsattrgroup/save",
+        data:params,
+        method:"POST"
+    })
+}
+export function attrRelation(params){
+    return request({
+        url:"/product/pmsattrgroup/relation",
         data:params,
         method:"POST"
     })
