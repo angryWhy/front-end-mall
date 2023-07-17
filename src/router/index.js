@@ -34,6 +34,16 @@ const routes = [
     path: '/login',
     name: 'loginView',
     component: () => import(/* webpackChunkName: "about" */ '../views/login/loginView.vue')
+  },
+  {
+    path: '/release',
+    name: 'releaseView',
+    component: () => import(/* webpackChunkName: "about" */ '../views/product/release/release.vue')
+  },
+  {
+    path: '/viplevel',
+    name: 'vipLevelView',
+    component: () => import(/* webpackChunkName: "about" */ '../views/vip/vipLevel/vipLevel.vue')
   }
 ]
 
