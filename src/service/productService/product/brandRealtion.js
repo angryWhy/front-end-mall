@@ -6,6 +6,12 @@ export function relationList(params){
         params
     })
 }
+export function brandAndCatelogList(params){
+    return request({
+        url:"/product/pmscategorybrandrelation/brand/list",
+        params
+    })
+}
 export function relationSave(params){
     return request({
         url:"/product/pmscategorybrandrelation/save",
