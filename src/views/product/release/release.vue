@@ -38,18 +38,17 @@
                 </el-form-item>
             </el-form>
         </el-card>
-        <el-card class="box-card" v-show="active == 1">
+        <el-card class="box-card" v-show="active == 1 || active == 2">
             <el-tabs tab-position="left" style="height: 200px">
-                <template v-for="item in tabsOptions" :key="item">
-                    <el-tab-pane :label="item.attrGroupName">
-                        <el-form :model="form" ref="firstFormRef" label-width="120px">
-                            <el-form-item label="">
-                                <el-input v-model="firstForm.name" />
-                            </el-form-item>
-                            <el-form-item label="商品介绍">
-                                <el-input v-model.number="firstForm.age" />
-                            </el-form-item>
-                        </el-form>
+                <template v-for="(item,wrapper) in tabsOptions" :key="item">
+                    <el-tab-pane :label="item.attrGroupName" v-if="(wrapper<=2&&active==1)||(wrapper>2&&active==2)">
+                        <template v-for="(item,index) in item.attrs" :key="item" >
+                            <el-form :model="form" ref="firstFormRef" label-width="120px">
+                                <el-form-item :label="item.attrName">
+                                    <el-input v-model="secondForm[wrapper][index].valueSelect" />
+                                </el-form-item>
+                            </el-form>
+                        </template>
                     </el-tab-pane>
                 </template>
             </el-tabs>
@@ -83,6 +82,7 @@ export default defineComponent({
             age: "",
             catelogName: ""
         });
+        const secondForm = ref(new Array());
         const tabsOptions = ref([]);
         const brandOptions = ref([]);
         const defaultProps = {
@@ -118,6 +118,16 @@ export default defineComponent({
             if (active.value == 1) {
                 attrGroupWithAttrs(firstForm.value.catelogId).then(res => {
                     tabsOptions.value = res.data;
+                    res.data.forEach((item, index) => {
+                        let arr = [];
+                        if (item.attrs.length > 0) {
+                            item.attrs.map(i => {
+                                arr.push(i)
+                                return i;
+                            })
+                        }
+                        secondForm.value.push(arr);
+                    })
                 })
             }
         }
@@ -132,7 +142,8 @@ export default defineComponent({
             firstForm,
             brandOptions,
             handleNext,
-            tabsOptions
+            tabsOptions,
+            secondForm
         }
     }
 })
