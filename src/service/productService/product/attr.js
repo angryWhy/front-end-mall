@@ -11,6 +11,11 @@ export function attrRelationList(id){
         url:`product/pmsattrgroup/${id}/attr/relation`
     })
 }
+export function attrGroupWithAttrs(id){
+    return request({
+        url:`product/pmsattrgroup/${id}/withattr`
+    })
+}
 export function attrNoRelationList(id){
     return request({
         url:`product/pmsattrgroup/${id}/attr/norelation`

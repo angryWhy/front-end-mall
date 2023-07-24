@@ -40,16 +40,25 @@
         </el-card>
         <el-card class="box-card" v-show="active == 1">
             <el-tabs tab-position="left" style="height: 200px">
-                <el-tab-pane label="主体">User</el-tab-pane>
-                <el-tab-pane label="基本信息">Config</el-tab-pane>
-                <el-tab-pane label="主芯片">Role</el-tab-pane>
+                <template v-for="item in tabsOptions" :key="item">
+                    <el-tab-pane :label="item.attrGroupName">
+                        <el-form :model="form" ref="firstFormRef" label-width="120px">
+                            <el-form-item label="">
+                                <el-input v-model="firstForm.name" />
+                            </el-form-item>
+                            <el-form-item label="商品介绍">
+                                <el-input v-model.number="firstForm.age" />
+                            </el-form-item>
+                        </el-form>
+                    </el-tab-pane>
+                </template>
             </el-tabs>
         </el-card>
         <div class="btn-group">
             <div style="width:250px;">
-                <el-button type="primary" @click="handleNext()" v-if="active!=4">下一步</el-button>
+                <el-button type="primary" @click="handleNext()" v-if="active != 4">下一步</el-button>
                 <el-button type="primary" @click="handleSubmit()" v-else>提交</el-button>
-                <el-button type="primary" @click="active = active - 1" v-if="active !=0||active!=4">上一步</el-button>
+                <el-button type="primary" @click="active = active - 1" v-if="active != 0 || active != 4">上一步</el-button>
             </div>
         </div>
     </div>
@@ -58,6 +67,7 @@
 <script>
 import { defineComponent, ref, reactive, onMounted } from 'vue'
 import { menuList } from "@/service/productService/product/product"
+import { attrGroupWithAttrs } from "@/service/productService/product/attr"
 import { brandAndCatelogList } from "@/service/productService/product/brandRealtion"
 export default defineComponent({
     name: 'releasesView',
@@ -72,7 +82,8 @@ export default defineComponent({
             catelogId: "",
             age: "",
             catelogName: ""
-        })
+        });
+        const tabsOptions = ref([]);
         const brandOptions = ref([]);
         const defaultProps = {
             children: 'children',
@@ -93,7 +104,7 @@ export default defineComponent({
             })
         }
         const handleSubmit = () => {
-            active.value = active.value+1;
+            active.value = active.value + 1;
         }
         const handleNodeClick = (value) => {
             console.log(value);
@@ -104,6 +115,11 @@ export default defineComponent({
         }
         const handleNext = () => {
             active.value = active.value + 1;
+            if (active.value == 1) {
+                attrGroupWithAttrs(firstForm.value.catelogId).then(res => {
+                    tabsOptions.value = res.data;
+                })
+            }
         }
         return {
             active,
@@ -115,7 +131,8 @@ export default defineComponent({
             handleNodeClick,
             firstForm,
             brandOptions,
-            handleNext
+            handleNext,
+            tabsOptions
         }
     }
 })
