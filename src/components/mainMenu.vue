@@ -17,9 +17,9 @@
                     <el-menu-item index="1-5"><router-link to="/saleattr">销售属性</router-link></el-menu-item>
                 </el-menu-item-group>
                 <el-menu-item-group title="商品维护">
-                    <el-menu-item index="1-1"><router-link to="/release">spu管理</router-link></el-menu-item>
-                    <el-menu-item index="1-2"><router-link to="/release">发布商品</router-link></el-menu-item>
-                    <el-menu-item index="1-3"><router-link to="/attrgroup">商品管理</router-link></el-menu-item>
+                    <el-menu-item index="2-1"><router-link to="/spuman">spu管理</router-link></el-menu-item>
+                    <el-menu-item index="2-2"><router-link to="/release">发布商品</router-link></el-menu-item>
+                    <el-menu-item index="2-3"><router-link to="/attrgroup">商品管理</router-link></el-menu-item>
                 </el-menu-item-group>
             </el-sub-menu>
             <el-sub-menu index="2">
@@ -29,10 +29,10 @@
                     </el-icon>
                     <span>用户系统</span>
                 </template>
-                    <el-menu-item index="1-1"><router-link to="/viplist">会员列表</router-link></el-menu-item>
-                    <el-menu-item index="1-2"><router-link to="/viplevel">会员等级</router-link></el-menu-item>
-                    <el-menu-item index="1-3"><router-link to="/vipscore">积分变化</router-link></el-menu-item>
-                    <el-menu-item index="1-4"><router-link to="/vipinfo">统计信息</router-link></el-menu-item>
+                    <el-menu-item index="3-1"><router-link to="/viplist">会员列表</router-link></el-menu-item>
+                    <el-menu-item index="3-2"><router-link to="/viplevel">会员等级</router-link></el-menu-item>
+                    <el-menu-item index="3-3"><router-link to="/vipscore">积分变化</router-link></el-menu-item>
+                    <el-menu-item index="3-4"><router-link to="/vipinfo">统计信息</router-link></el-menu-item>
             </el-sub-menu>
         </el-menu>
     </div>

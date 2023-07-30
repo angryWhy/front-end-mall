@@ -44,6 +44,11 @@ const routes = [
     path: '/viplevel',
     name: 'vipLevelView',
     component: () => import(/* webpackChunkName: "about" */ '../views/vip/vipLevel/vipLevel.vue')
+  },
+  {
+    path: '/spuman',
+    name: 'vipLevelView',
+    component: () => import(/* webpackChunkName: "about" */ '../views/product/spu/spuman.vue')
   }
 ]
 
