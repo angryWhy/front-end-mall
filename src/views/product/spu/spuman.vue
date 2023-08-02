@@ -10,14 +10,12 @@
                     </el-form-item>
                     <el-form-item label="品牌">
                         <el-select v-model="formInline.region" clearable>
-                            <el-option label="Zone one" value="shanghai" />
-                            <el-option label="Zone two" value="beijing" />
+                            <el-option v-for="item in brandOptions" :key="item" :label="item.name" :value="item.brandId"/>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="状态">
                         <el-select v-model="formInline.region" clearable>
-                            <el-option label="Zone one" value="shanghai" />
-                            <el-option label="Zone two" value="beijing" />
+                            <el-option v-for="item in brandOptions" :key="item" :label="item.name" :value="item.brandId"/>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="检索">
@@ -30,16 +28,16 @@
                 <div>
                     <el-table :data="tableData" style="margin-top:20px;">
                         <el-table-column type="selection" width="55" />
-                        <el-table-column prop="attrGroupId" label="id" width="180" />
-                        <el-table-column prop="attrGroupName" label="名称" width="180" />
-                        <el-table-column prop="catelogId" label="描述" />
-                        <el-table-column prop="descript" label="分类ID" />
-                        <el-table-column prop="icon" label="品牌" />
-                        <el-table-column prop="sort" label="重量" />
-                        <el-table-column prop="sort" label="上架状态">
-                        </el-table-column>
-                        <el-table-column prop="sort" label="创建时间" />
-                        <el-table-column prop="sort" label="修改时间" />
+                        <el-table-column prop="id" label="id" width="180" />
+                        <el-table-column prop="spuName" label="名称" width="180" />
+                        <el-table-column prop="spuDescription" label="描述" />
+                        <el-table-column prop="catalogId" label="分类ID" />
+                        <el-table-column prop="" label="品牌" />
+                        <el-table-column prop="weight" label="重量" />
+                        <el-table-column prop="updateTime" label="上架状态"/>
+                       
+                        <el-table-column prop="createTime" label="创建时间" />
+                        <el-table-column prop="updateTime" label="修改时间" />
                         <el-table-column fixed="right" label="操作" width="200">
                             <template #default="scope">
                                 <el-button link type="primary" @click="handleRelated(scope.row)">上架</el-button>
@@ -92,6 +90,8 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import formView from "./Form"
 import relation from './relation'
 import { attrList, attrAdd, attrUpdate } from "@/service/productService/product/attr"
+import { brandList } from '@/service/productService/product/brand'
+import {spuList} from "@/service/productService/product/spu"
 export default defineComponent({
     name: 'categoryView',
     components: {
@@ -104,7 +104,7 @@ export default defineComponent({
         const catelogId = ref(0);
         const addDialogVisible = ref(false);
         const editDialogVisible = ref(false);
-        const key = ref(1);
+        const key = ref("");
         const formInline = ref({
             catelogId: '',
             region: '',
@@ -112,14 +112,15 @@ export default defineComponent({
         })
         const tableData = ref([]);
         const relationDialogVisible = ref(false);
+        const brandOptions = ref([]);
         const pagination = ref({
             pageIndex: 1,
             pageSize: 20,
             totalcount: 0,
         });
         const loadTableData = () => {
-            attrList({
-                key: key.value
+            spuList({
+                key: key.value,
             }, catelogId.value).then(res => {
                 if (res.code == 0 && res.page.list.length > 0) {
                     tableData.value = res.page.list;
@@ -140,7 +141,14 @@ export default defineComponent({
         const handleChange = (value) => {
             console.log(value);
             formInline.value.catelogId = value[2];
-            console.log(formInline.value.catelogId);
+            loadBrand();
+        }
+        const loadBrand = () => {
+            brandList({
+                catId:formInline.value.catelogId
+            }).then(res=>{
+                brandOptions.value = res.page.list;
+            })
         }
         const handleSizeChange = (index) => {
             pagination.value.pageSize = index;
@@ -235,7 +243,9 @@ export default defineComponent({
             relationDialogVisible,
             handleRelated,
             handleClose,
-            formInline
+            formInline,
+            loadBrand,
+            brandOptions
         }
     }
 })
