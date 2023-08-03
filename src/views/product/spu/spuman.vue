@@ -9,20 +9,21 @@
                             :props="defaultProps"  />
                     </el-form-item>
                     <el-form-item label="品牌">
-                        <el-select v-model="formInline.region" clearable>
+                        <el-select v-model="formInline.brandId" clearable>
                             <el-option v-for="item in brandOptions" :key="item" :label="item.name" :value="item.brandId"/>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="状态">
-                        <el-select v-model="formInline.region" clearable>
-                            <el-option v-for="item in brandOptions" :key="item" :label="item.name" :value="item.brandId"/>
+                        <el-select v-model="formInline.status" clearable>
+                            <el-option label="上架" value="1"/>
+                            <el-option label="下架" value="2"/>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="检索">
-                        <el-input v-model="formInline.date" clearable />
+                        <el-input v-model="formInline.key" clearable />
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="onSubmit">查询</el-button>
+                        <el-button type="primary" @click="loadTableData">查询</el-button>
                     </el-form-item>
                 </el-form>
                 <div>
@@ -107,8 +108,9 @@ export default defineComponent({
         const key = ref("");
         const formInline = ref({
             catelogId: '',
-            region: '',
-            date: '',
+            brandId: '',
+            status: '',
+            key:""
         })
         const tableData = ref([]);
         const relationDialogVisible = ref(false);
@@ -120,9 +122,9 @@ export default defineComponent({
         });
         const loadTableData = () => {
             spuList({
-                key: key.value,
+                ...formInline.value
             }, catelogId.value).then(res => {
-                if (res.code == 0 && res.page.list.length > 0) {
+                if (res.code == 0 ) {
                     tableData.value = res.page.list;
                 }
             })
