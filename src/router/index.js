@@ -49,7 +49,12 @@ const routes = [
     path: '/spuman',
     name: 'vipLevelView',
     component: () => import(/* webpackChunkName: "about" */ '../views/product/spu/spuman.vue')
-  }
+  },
+  {
+    path: '/skuman',
+    name: 'skuView',
+    component: () => import(/* webpackChunkName: "about" */ '../views/product/sku/skuman.vue')
+  },
 ]
 
 const router = createRouter({

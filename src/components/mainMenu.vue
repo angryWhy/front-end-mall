@@ -19,7 +19,7 @@
                 <el-menu-item-group title="商品维护">
                     <el-menu-item index="2-1"><router-link to="/spuman">spu管理</router-link></el-menu-item>
                     <el-menu-item index="2-2"><router-link to="/release">发布商品</router-link></el-menu-item>
-                    <el-menu-item index="2-3"><router-link to="/attrgroup">商品管理</router-link></el-menu-item>
+                    <el-menu-item index="2-3"><router-link to="/skuman">商品管理</router-link></el-menu-item>
                 </el-menu-item-group>
             </el-sub-menu>
             <el-sub-menu index="2">
