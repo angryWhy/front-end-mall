@@ -22,6 +22,18 @@
                     <el-menu-item index="2-3"><router-link to="/skuman">商品管理</router-link></el-menu-item>
                 </el-menu-item-group>
             </el-sub-menu>
+            <el-sub-menu index="3">
+                <template #title>
+                    <el-icon>
+                        <Fries />
+                    </el-icon>
+                    <span>库存系统</span>
+                </template>
+                    <el-menu-item index="4-1"><router-link to="/wareprocess">库存维护</router-link></el-menu-item>
+                    <el-menu-item index="4-2"><router-link to="/wareexcel">库存工作表</router-link></el-menu-item>
+                    <el-menu-item index="4-3"><router-link to="/warecount">商品库存</router-link></el-menu-item>
+                    <el-menu-item index="4-4"><router-link to="/wareman">采购单维护</router-link></el-menu-item>
+            </el-sub-menu>
             <el-sub-menu index="2">
                 <template #title>
                     <el-icon>

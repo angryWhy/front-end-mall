@@ -55,6 +55,11 @@ const routes = [
     name: 'skuView',
     component: () => import(/* webpackChunkName: "about" */ '../views/product/sku/skuman.vue')
   },
+  {
+    path: '/wareprocess',
+    name: 'wareprocessView',
+    component: () => import(/* webpackChunkName: "about" */ '../views/ware/wareprocess/wareprocess.vue')
+  },
 ]
 
 const router = createRouter({
